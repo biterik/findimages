@@ -1,0 +1,39 @@
+searchdir=$1
+savedir=$PWD/$2
+
+maxpictures=200
+
+directorylist=`find $searchdir -type d`
+for dir in $directorylist 
+ do
+	cd $dir
+	nfiles=`ls -l *.jpg | wc -l`
+	if (( $nfiles > 0)); then
+	  files=`ls *.jpg`
+	  dirname=`echo $dir | sed 's/\//_/g' |sed 's/ //g'`
+	  echo "$dirname has $nfiles jpgs"
+	  if (( $nfiles < $maxpictures)); then
+	   montage -label '%f' -font Helvetica -pointsize 10 -fill 'black' -define jpg:size=200x200 -geometry 200x200+2+2 -auto-orient $files $savedir/$dirname.jpg
+	  fi
+	fi
+	nfiles=`ls -l *.png | wc -l`
+        if (( $nfiles > 0)); then
+          files=`ls *.png`
+          dirname=`echo $dir | sed 's/\//_/g' |sed 's/ //g'`
+          echo "$dirname has $nfiles pngs"
+          if (( $nfiles < $maxpictures)); then
+           montage -label '%f' -font Helvetica -pointsize 10 -fill 'black' -define png:size=200x200 -geometry 200x200+2+2 -auto-orient $files $savedir/$dirname.png
+          fi
+	fi
+	nfiles=`ls -l *.tiff *.tif | wc -l`
+        if (( $nfiles > 0)); then
+          files=`ls *.tif *.tiff`
+          dirname=`echo $dir | sed 's/\//_/g' |sed 's/ //g'`
+          echo "$dirname has $nfiles tifs"
+          if (( $nfiles < $maxpictures)); then
+           montage -label '%f' -font Helvetica -pointsize 10 -fill 'black' -define tiff:size=200x200 -geometry 200x200+2+2 -auto-orient $files $savedir/$dirname.tiff
+          fi
+        fi
+
+done	
+
