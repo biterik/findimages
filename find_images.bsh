@@ -1,5 +1,11 @@
+#!/bin/bash
+# script to make contact prints of all pictures in
+# directories (use absolute paths)
+# usage ./collect_immages.bsh directory_to_look_in picture_directory
+# Erik Bitzek,Thu Apr 30 13:28:01 CEST 2020
+
 searchdir=$1
-savedir=$PWD/$2
+savedir=$2
 
 maxpictures=200
 
@@ -7,7 +13,7 @@ directorylist=`find $searchdir -type d`
 for dir in $directorylist 
  do
 	cd $dir
-	nfiles=`ls -l *.jpg | wc -l`
+	nfiles=`ls -l *.jpg 2> /dev/null | wc -l`
 	if (( $nfiles > 0)); then
 	  files=`ls *.jpg`
 	  dirname=`echo $dir | sed 's/\//_/g' |sed 's/ //g'`
@@ -16,7 +22,7 @@ for dir in $directorylist
 	   montage -label '%f' -font Helvetica -pointsize 10 -fill 'black' -define jpg:size=200x200 -geometry 200x200+2+2 -auto-orient $files $savedir/$dirname.jpg
 	  fi
 	fi
-	nfiles=`ls -l *.png | wc -l`
+	nfiles=`ls -l *.png 2> /dev/null | wc -l`
         if (( $nfiles > 0)); then
           files=`ls *.png`
           dirname=`echo $dir | sed 's/\//_/g' |sed 's/ //g'`
@@ -25,7 +31,7 @@ for dir in $directorylist
            montage -label '%f' -font Helvetica -pointsize 10 -fill 'black' -define png:size=200x200 -geometry 200x200+2+2 -auto-orient $files $savedir/$dirname.png
           fi
 	fi
-	nfiles=`ls -l *.tiff *.tif | wc -l`
+	nfiles=`ls -l *.tiff *.tif 2> /dev/null  | wc -l`
         if (( $nfiles > 0)); then
           files=`ls *.tif *.tiff`
           dirname=`echo $dir | sed 's/\//_/g' |sed 's/ //g'`
